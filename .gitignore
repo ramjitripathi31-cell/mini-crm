@@ -1,0 +1,19 @@
+# Node modules
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Build files
+build/
+dist/
+
+# Logs
+*.log
+
+# OS/System
+.DS_Store
+.env
+.env.local
+
+# Temporary files
+packages.microsoft.gpg
