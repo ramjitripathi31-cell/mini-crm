@@ -4,8 +4,8 @@ import axios from 'axios';
 import { useAuth } from '../App';
 
 export default function Register() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState(''); 
+ const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const nav = useNavigate();
   const { login } = useAuth();
@@ -14,7 +14,7 @@ export default function Register() {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        'http://localhost:5000/api/auth/register',
+        "http://13.61.12.156:5000/api/auth/register",
         { name, email, password }
       );
       login(data.token);

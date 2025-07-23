@@ -13,7 +13,7 @@ export default function Login() {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        'http://localhost:5000/api/auth/login',
+        'http://13.61.12.156:5000/api/auth/login',
         { email, password }
       );
       login(data.token);
