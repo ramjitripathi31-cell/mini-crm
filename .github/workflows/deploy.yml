@@ -1,4 +1,4 @@
-name: Deploy to EC2 via Token
+name: 🚀 Deploy to EC2
 
 on:
   push:
@@ -7,31 +7,21 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to EC2 via GitHub Token
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to EC2 via GitHub Token
+      - name: 📦 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔑 Setup SSH and Deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: 13.61.12.156
           username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          port: 5000
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
           script: |
-            echo "🔐 Setting up Git credentials for token access"
-            cd /var/www/mini-crm
-            git remote set-url origin https://ramjitripathi31-cell:${{ secrets.GH_TOKEN }}@github.com/ramjitripathi31-cell/mini-crm.git
-            
-            echo "🔄 Pulling latest code"
+            cd /var/www/html/mini-crm
             git pull origin main
-
-            echo "🧱 Building frontend"
-            cd client
-            npm install
-            npm run build
-
-            echo "🚀 Restarting backend server"
-            cd ../server
-            npm install
-            pm2 restart backend 
+            npm install --production
+            pm2 restart all
