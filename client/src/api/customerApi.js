@@ -4,7 +4,7 @@ const API_BASE_URL =
     : import.meta.env.VITE_API_URL_PROD;
 
 export const getCustomers = async () => {
-  const res = await fetch(`${API_BASE_URL}/customers/auth/login`);
+  const res = await fetch(`${API_BASE_URL}/customers`)
   return res.json();
 };
 
