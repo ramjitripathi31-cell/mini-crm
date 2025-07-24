@@ -1,4 +1,4 @@
-name: Deploy Vite App to GitHub Pages
+name: Deploy to EC2 via Token
 
 on:
   push:
@@ -6,26 +6,32 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  deploy:
+    name: Deploy to EC2 via GitHub Token
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📦 Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: 🔧 Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Deploy to EC2 via GitHub Token
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          node-version: 18
+          host: 13.61.12.156
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 5000
+          script: |
+            echo "🔐 Setting up Git credentials for token access"
+            cd /var/www/mini-crm
+            git remote set-url origin https://ramjitripathi31-cell:${{ secrets.GH_TOKEN }}@github.com/ramjitripathi31-cell/mini-crm.git
+            
+            echo "🔄 Pulling latest code"
+            git pull origin main
 
-      - name: ⬇️ Install Dependencies & Build Vite App
-        run: |
-          cd client
-          npm ci
-          npm run build
+            echo "🧱 Building frontend"
+            cd client
+            npm install
+            npm run build
 
-      - name: 🚀 Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          publish_dir: ./client/dist
+            echo "🚀 Restarting backend server"
+            cd ../server
+            npm install
+            pm2 restart backend 
