@@ -1,52 +1,31 @@
-name: Deploy Vite Frontend
+name: Deploy Vite App to GitHub Pages
 
 on:
   push:
     branches:
-      - main  # Or your deployment branch
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: 📦 Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: 🔧 Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - name: Install dependencies
-        run: npm install
-        working-directory: client
-
-      - name: Build Vite app
-        run: npm run build
-        working-directory: client
-
-      - name: Deploy (via token)
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: ⬇️ Install Dependencies & Build Vite App
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}
-          git fetch
-          git checkout gh-pages || git checkout --orphan gh-pages
+          cd client
+          npm ci
+          npm run build
 
-          # Remove all files except .git
-          find . -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} +
-
-          # Copy build output
-          cp -r client/dist/* .
-
-          # Add and commit changes if there are any
-          git add .
-          if ! git diff --cached --quiet; then
-            git commit -m "Deploy from GitHub Actions"
-            git push origin gh-pages --force
-          else
-            echo "No changes to deploy"
-          fi
+      - name: 🚀 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          publish_dir: ./client/dist
