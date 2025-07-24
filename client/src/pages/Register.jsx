@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../App';
 
+const API_BASE_URL =
+  import.meta.env.MODE === 'development'
+    ? import.meta.env.VITE_API_URL_LOCAL
+    : import.meta.env.VITE_API_URL_PROD;
+
 export default function Register() {
   const [name, setName] = useState(''); 
  const [email, setEmail] = useState('');
@@ -14,7 +19,7 @@ export default function Register() {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://13.61.12.156:5000/api/auth/register",
+        `${API_BASE_URL}/auth/login`,
         { name, email, password }
       );
       login(data.token);

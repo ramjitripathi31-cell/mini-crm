@@ -1,12 +1,15 @@
-const BASE_URL = 'http://localhost:5000/api/customers';
+const API_BASE_URL =
+  import.meta.env.MODE === 'development'
+    ? import.meta.env.VITE_API_URL_LOCAL
+    : import.meta.env.VITE_API_URL_PROD;
 
 export const getCustomers = async () => {
-  const res = await fetch(BASE_URL);
+  const res = await fetch(API_BASE_URL);
   return res.json();
 };
 
 export const addCustomer = async (data) => {
-  const res = await fetch(BASE_URL, {
+  const res = await fetch(API_BASE_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -15,7 +18,7 @@ export const addCustomer = async (data) => {
 };
 
 export const updateCustomer = async (id, data) => {
-  const res = await fetch(`${BASE_URL}/${id}`, {
+  const res = await fetch(`${API_BASE_URL}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -24,5 +27,5 @@ export const updateCustomer = async (id, data) => {
 };
 
 export const deleteCustomer = async (id) => {
-  await fetch(`${BASE_URL}/${id}`, { method: 'DELETE' });
+  await fetch(`${API_BASE_URL}/${id}`, { method: 'DELETE' });
 };
