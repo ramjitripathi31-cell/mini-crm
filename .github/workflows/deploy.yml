@@ -31,4 +31,3 @@ jobs:
             cd ../server                        # Go to backend folder
             npm install                         # Optional, in case deps changed
             pm2 restart all                     # Restart Node.js backend via PM2
-            pm2 logs backend                    # Show logs for backend
