@@ -25,9 +25,10 @@ jobs:
             git pull origin main                # Pull latest changes
 
             cd client                           # Enter frontend folder
-            npm install --production            # Install frontend deps
+            npm install                          # Install frontend deps
             npm run build                       # Build React app
 
             cd ../server                        # Go to backend folder
             npm install                         # Optional, in case deps changed
             pm2 restart all                     # Restart Node.js backend via PM2
+            pm2 logs backend                    # Show logs for backend
